@@ -2,6 +2,7 @@ import Hero from "@/components/Hero";
 import Image from "next/image";
 import { navItems } from "@/data";
 import { FloatingNav } from "@/components/ui/FloatingNav";
+import About from "@/components/About";
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
       <div className="max-w-7xl w-full">
         <FloatingNav navItems={navItems} />
         <Hero/>
+        <About/>
       </div>
     </main>
   );

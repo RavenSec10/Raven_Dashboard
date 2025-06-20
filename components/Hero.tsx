@@ -9,35 +9,42 @@ import { cn } from "@/lib/utils";
 const Hero = () => {
   return (
     <div className='pb-20 pt-36'>
-        <div className="absolute top-0 left-0 w-full z-20">
-        <div className="flex items-center justify-start p-6">
-          <div className="flex items-center space-x-3">
-            {/* Logo - You can replace this with your actual logo */}
-            <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">R</span>
-            </div>
-            <span className="text-white font-bold text-xl tracking-wide">RavenSec</span>
-          </div>
-        </div>
-        </div>
         <div>
-            <Spotlight className="left-1 top-22 h-[20vh] w-[250vw]" fill="red" />
-            <Spotlight className="left-10 top-22 h-[30vh] w-[250vw]" fill="red" />
-            <Spotlight className="left-20 top-22 h-[40vh] w-[50vw]" fill="red" />
-            <Spotlight className="left-40 top-22 h-[50vh] w-[50vw]" fill="red" />
-            <Spotlight className="left-60 top-22 h-[60vh] w-[250vw]" fill="red" />
-            <Spotlight className="left-90 top-26 h-[70vh] w-[50vw]" fill="red" />
-            <Spotlight className="left-120 top-26 h-[90vh] w-[50vw]" fill="red" />
-            <Spotlight className="left-160 top-28 h-[110vh] w-[50vw]" fill="red" />
-            <Spotlight className="left-200 top-28 h-[130vh] w-[50vw]" fill="red" />
-            <Spotlight className="left-240 top-28 h-[150vh] w-[50vw]" fill="red" />
-            <Spotlight className="left-280 top-28 h-[170vh] w-[50vw]" fill="red" />
-            <Spotlight className="left-320 top-28 h-[210vh] w-[50vw]" fill="red" />
-            <Spotlight className="left-326 top-28 h-[230vh] w-[50vw]" fill="red" />
-            <Spotlight className="left-330 top-28 h-[80vh] w-[50vw]" fill="red" />
-            <Spotlight className="left-360 top-28 h-[80vh] w-[50vw]" fill="red" />
-            <Spotlight className="left-400 top-28 h-[80vh] w-[50vw]" fill="red" />
-            <Spotlight className="left-440 top-28 h-[80vh] w-[50vw]" fill="red" />
+            <div className="block md:hidden">
+                <Spotlight className="left-0 top-20 h-[40vh] w-[300vw]" fill="red" />
+                <Spotlight className="left-20 top-20 h-[50vh] w-[200vw]" fill="red" />  
+                <Spotlight className="left-40 top-20 h-[60vh] w-[150vw]" fill="red" />
+            </div>
+            
+            {/* Tablet Spotlights - Medium complexity */}
+            <div className="hidden md:block lg:hidden">
+                <Spotlight className="left-2 top-22 h-[30vh] w-[250vw]" fill="red" />
+                <Spotlight className="left-10 top-22 h-[40vh] w-[200vw]" fill="red" />
+                <Spotlight className="left-20 top-22 h-[50vh] w-[150vw]" fill="red" />
+                <Spotlight className="left-40 top-22 h-[60vh] w-[100vw]" fill="red" />
+                <Spotlight className="left-60 top-24 h-[70vh] w-[80vw]" fill="red" />
+            </div>
+            
+            {/* Desktop Spotlights - Full complexity */}
+            <div className="hidden lg:block">
+                <Spotlight className="left-1 top-22 h-[20vh] w-[250vw]" fill="red" />
+                <Spotlight className="left-10 top-22 h-[30vh] w-[250vw]" fill="red" />
+                <Spotlight className="left-20 top-22 h-[40vh] w-[50vw]" fill="red" />
+                <Spotlight className="left-40 top-22 h-[50vh] w-[50vw]" fill="red" />
+                <Spotlight className="left-60 top-22 h-[60vh] w-[250vw]" fill="red" />
+                <Spotlight className="left-90 top-26 h-[70vh] w-[50vw]" fill="red" />
+                <Spotlight className="left-120 top-26 h-[90vh] w-[50vw]" fill="red" />
+                <Spotlight className="left-160 top-28 h-[110vh] w-[50vw]" fill="red" />
+                <Spotlight className="left-200 top-28 h-[130vh] w-[50vw]" fill="red" />
+                <Spotlight className="left-240 top-28 h-[150vh] w-[50vw]" fill="red" />
+                <Spotlight className="left-280 top-28 h-[170vh] w-[50vw]" fill="red" />
+                <Spotlight className="left-320 top-28 h-[210vh] w-[50vw]" fill="red" />
+                <Spotlight className="left-326 top-28 h-[230vh] w-[50vw]" fill="red" />
+                <Spotlight className="left-330 top-28 h-[80vh] w-[50vw]" fill="red" />
+                <Spotlight className="left-360 top-28 h-[80vh] w-[50vw]" fill="red" />
+                <Spotlight className="left-400 top-28 h-[80vh] w-[50vw]" fill="red" />
+                <Spotlight className="left-440 top-28 h-[80vh] w-[50vw]" fill="red" />
+            </div>
         </div>
 
         <BackgroundBeams className="z-0" />
@@ -48,7 +55,7 @@ const Hero = () => {
             Welcome to RavenSec
           </p>
           <TextGenerateEffect
-            words="Know Your APIs. Protect What Matters. Detect Your Traffic. Defend Your Assets."
+            words="The Raven Sees What Others Miss. Protects What Others Can't."
             className="text-center text-[30px] md:text-3xl lg:text-4xl xl:text-5xl font-bold"
           />
             <br />
