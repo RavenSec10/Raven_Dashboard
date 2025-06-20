@@ -26,12 +26,10 @@ export const FloatingNav = ({
   const [visible, setVisible] = useState(true);
 
   useMotionValueEvent(scrollYProgress, "change", (current) => {
-    // Check if current is not undefined and is a number
     if (typeof current === "number") {
       let direction = current! - scrollYProgress.getPrevious()!;
 
       if (scrollYProgress.get() < 0.05) {
-        // also set true for the initial state
         setVisible(true);
       } else {
         if (direction < 0) {
@@ -58,7 +56,6 @@ export const FloatingNav = ({
           duration: 0.2,
         }}
         className={cn(
-          // Enhanced responsive design with better mobile handling
           "flex max-w-fit md:min-w-[70vw] lg:min-w-fit fixed z-[5000] top-6 sm:top-8 md:top-10 inset-x-0 mx-auto px-4 sm:px-6 md:px-10 py-3 sm:py-4 md:py-5 rounded-lg border border-black/.1 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] items-center justify-center space-x-2 sm:space-x-3 md:space-x-4",
           className
         )}
@@ -71,16 +68,16 @@ export const FloatingNav = ({
       >
         {/* Logo integrated into the navbar */}
         <div className="flex items-center space-x-2 mr-2 sm:mr-3 md:mr-4">
-          <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 bg-red-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm sm:text-base md:text-lg">R</span>
-          </div>
+          <img
+            src="/ravensec-logo.png"
+            alt="RavenSec Logo"
+            className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 object-contain"
+          />
           <span className="text-white font-bold text-sm sm:text-base md:text-xl tracking-wide">RavenSec</span>
         </div>
         
-        {/* Separator line */}
         <div className="h-6 w-px bg-white/20 hidden sm:block"></div>
         
-        {/* Navigation items */}
         <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
           {navItems.map((navItem: any, idx: number) => (
             <Link
