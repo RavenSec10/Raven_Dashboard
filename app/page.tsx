@@ -3,6 +3,7 @@ import Image from "next/image";
 import { navItems } from "@/data";
 import { FloatingNav } from "@/components/ui/FloatingNav";
 import About from "@/components/About";
+import Grid from "@/components/Grid";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
         <FloatingNav navItems={navItems} />
         <Hero/>
         <About/>
+        <Grid/>
       </div>
     </main>
   );

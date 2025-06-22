@@ -14,7 +14,7 @@ const About = () => {
   }
 
   return (
-    <div className="bg-white dark:bg-slate-950 -mt-40 md:-mt-60">
+    <div className="bg-white dark:bg-slate-950 -mt-40 md:-mt-60 -mb-20">
       <ContainerScroll
         titleComponent={
           <div className="space-y-4">
