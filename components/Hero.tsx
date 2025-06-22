@@ -60,7 +60,7 @@ const Hero = () => {
           />
             <br />
           <p className="text-center md:tracking-wider mb-4 text-xs md:text-sm lg:text-base max-w-4xl">
-            Inspect API traffic to map endpoints, classify data types, verify authentication, and detect sensitive information.
+            Inspect API traffic to comprehensively map all endpoints and routes, classify data types and payload structures, verify authentication mechanisms and authorization controls, detect sensitive information exposure, and identify potential security vulnerabilities across your API infrastructure.
           </p>
 
           <a href="#about">
