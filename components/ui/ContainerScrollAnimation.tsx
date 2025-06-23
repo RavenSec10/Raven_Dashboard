@@ -40,7 +40,7 @@ export const ContainerScroll = ({
       ref={containerRef}
     >
       <div
-        className="py-5 md:py-10 w-full relative" // Reduced padding from py-10 md:py-40 to py-5 md:py-10
+        className="py-5 md:py-10 w-full relative"
         style={{
           perspective: "1000px",
         }}
@@ -54,13 +54,19 @@ export const ContainerScroll = ({
   );
 };
 
-export const Header = ({ translate, titleComponent }: any) => {
+export const Header = ({ 
+  translate, 
+  titleComponent 
+}: {
+  translate: MotionValue<number>;
+  titleComponent: string | React.ReactNode;
+}) => {
   return (
     <motion.div
       style={{
         translateY: translate,
       }}
-      className="div max-w-5xl mx-auto text-center mb-8" // Added mb-8 for better spacing control
+      className="div max-w-5xl mx-auto text-center mb-8"
     >
       {titleComponent}
     </motion.div>
