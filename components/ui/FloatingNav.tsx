@@ -76,7 +76,7 @@ export const FloatingNav = ({
             height={40}
             className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 object-contain"
           />
-          <span className="text-white font-bold text-sm sm:text-base md:text-xl tracking-wide">RavenSec</span>
+          <span className="text-white font-bold text-sm sm:text-base md:text-xl tracking-wide"><span className="text-red-500">Raven</span>Sec</span>
         </div>
         
         <div className="h-6 w-px bg-white/20 hidden sm:block"></div>
