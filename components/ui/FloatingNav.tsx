@@ -110,19 +110,20 @@ export const FloatingNav = ({
         
         <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
           <SignedOut>
-            {/* These buttons will open the Clerk sign-in modal */}
-            <SignInButton mode="modal">
-              <button className="relative dark:text-neutral-50 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500 transition-colors duration-200 text-xs sm:text-sm">
-                Sign In
-              </button>
-            </SignInButton>
-            <SignUpButton mode="modal">
-               <button className="relative dark:text-neutral-50 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500 transition-colors duration-200 text-xs sm:text-sm">
-                Sign Up
-              </button>
-            </SignUpButton>
+            {/* Custom links to your sign-in and sign-up pages */}
+            <Link 
+              href="/sign-in"
+              className="relative dark:text-neutral-50 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500 transition-colors duration-200 text-xs sm:text-sm"
+            >
+              Sign In
+            </Link>
+            <Link 
+              href="/sign-up"
+              className="relative dark:text-neutral-50 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500 transition-colors duration-200 text-xs sm:text-sm"
+            >
+              Sign Up
+            </Link>
           </SignedOut>
-
           <SignedIn>
             <UserButton afterSignOutUrl="/" />
           </SignedIn>

@@ -1,5 +1,5 @@
-import {CustomSignIn} from '@/components/auth/SignIn'
+import { SignIn } from '@clerk/nextjs'
 
-export default function SignInPage() {
-  return <CustomSignIn />
+export default function Page() {
+  return <SignIn />
 }

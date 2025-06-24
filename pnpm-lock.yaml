@@ -11,6 +11,9 @@ importers:
       '@clerk/nextjs':
         specifier: ^6.23.0
         version: 6.23.0(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@clerk/themes':
+        specifier: ^2.2.51
+        version: 2.2.51
       '@clerk/types':
         specifier: ^4.61.0
         version: 4.61.0
@@ -131,6 +134,10 @@ packages:
         optional: true
       react-dom:
         optional: true
+
+  '@clerk/themes@2.2.51':
+    resolution: {integrity: sha512-lcPwiN3zqgzBX5EddT5z0XWxUzpYS7FZY+6OoQ8zw4xyf/ub+GwAdzcXxYZTbrEKEJ5OpG+UX0qBKIbq5NUkzQ==}
+    engines: {node: '>=18.17.0'}
 
   '@clerk/types@4.61.0':
     resolution: {integrity: sha512-SK58IsUIAmmgm8qg63raiZCXvpwKQobpA9/wCOfQj5GgN8CIEuCqGwqLGzk8xkYabLsLTACLs1l9bx38rLMMzQ==}
@@ -2360,6 +2367,11 @@ snapshots:
     optionalDependencies:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
+
+  '@clerk/themes@2.2.51':
+    dependencies:
+      '@clerk/types': 4.61.0
+      tslib: 2.8.1
 
   '@clerk/types@4.61.0':
     dependencies:
