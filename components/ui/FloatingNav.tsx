@@ -6,6 +6,13 @@ import {
   useScroll,
   useMotionValueEvent,
 } from "framer-motion";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -73,7 +80,7 @@ export const FloatingNav = ({
             alt="RavenSec Logo"
             className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 object-contain"
           />
-          <span className="text-white font-bold text-sm sm:text-base md:text-xl tracking-wide">RavenSec</span>
+          <span className="text-white font-bold text-sm sm:text-base md:text-xl tracking-wide"><span className="text-red-500">Raven</span>Sec</span>
         </div>
         
         <div className="h-6 w-px bg-white/20 hidden sm:block"></div>
@@ -91,6 +98,27 @@ export const FloatingNav = ({
               <span className="text-xs sm:text-sm !cursor-pointer whitespace-nowrap">{navItem.name}</span>
             </Link>
           ))}
+        </div>
+        <div className="h-6 w-px bg-white/20 hidden sm:block"></div>
+        
+        <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
+          <SignedOut>
+            {/* These buttons will open the Clerk sign-in modal */}
+            <SignInButton mode="modal">
+              <button className="relative dark:text-neutral-50 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500 transition-colors duration-200 text-xs sm:text-sm">
+                Sign In
+              </button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+               <button className="relative dark:text-neutral-50 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500 transition-colors duration-200 text-xs sm:text-sm">
+                Sign Up
+              </button>
+            </SignUpButton>
+          </SignedOut>
+
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
         </div>
       </motion.div>
     </AnimatePresence>
