@@ -14,6 +14,7 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 export const FloatingNav = ({
@@ -34,7 +35,7 @@ export const FloatingNav = ({
 
   useMotionValueEvent(scrollYProgress, "change", (current) => {
     if (typeof current === "number") {
-      let direction = current! - scrollYProgress.getPrevious()!;
+      const direction = current! - scrollYProgress.getPrevious()!;
 
       if (scrollYProgress.get() < 0.05) {
         setVisible(true);
@@ -75,9 +76,11 @@ export const FloatingNav = ({
       >
         {/* Logo integrated into the navbar */}
         <div className="flex items-center space-x-2 mr-2 sm:mr-3 md:mr-4">
-          <img
+          <Image
             src="/ravensec-logo.png"
             alt="RavenSec Logo"
+            width={40}
+            height={40}
             className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 object-contain"
           />
           <span className="text-white font-bold text-sm sm:text-base md:text-xl tracking-wide"><span className="text-red-500">Raven</span>Sec</span>
@@ -86,7 +89,11 @@ export const FloatingNav = ({
         <div className="h-6 w-px bg-white/20 hidden sm:block"></div>
         
         <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
-          {navItems.map((navItem: any, idx: number) => (
+          {navItems.map((navItem: {
+            name: string;
+            link: string;
+            icon?: React.ReactElement;
+          }, idx: number) => (
             <Link
               key={`link=${idx}`}
               href={navItem.link}
