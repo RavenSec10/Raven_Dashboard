@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import { Spotlight } from './ui/Spotlight';
-import { BackgroundBeams } from './ui/BackgroundBeams';
 import MagicButton from "./MagicButton";
 import { TextGenerateEffect } from "./ui/TextGenerateEffect";
 import { FaLocationArrow } from "react-icons/fa6";
-
+import { cn } from "@/lib/utils";
+const BackgroundBeams = lazy(() => import('./ui/BackgroundBeams').then(module => ({ default: module.BackgroundBeams })));
 const Hero = () => {
   return (
     <div className='pb-20 pt-36 relative'>
@@ -19,44 +19,54 @@ const Hero = () => {
         />
         <Spotlight className="left-80 top-28 h-[80vh] w-[50vw]" fill="red" />
         <Spotlight
-          className="-top-20 -right-20 md:-right-32 h-[70vh] w-[45vw]"
+          className="-top-10 -right-10 h-[70vh] w-[45vw]"
           fill="white"
         />
         <Spotlight
-          className="bottom-10 -left-20 h-[60vh] w-[40vw]"
+          className="bottom-10 -left-10 h-[60vh] w-[40vw]"
           fill="red"
         />
         <Spotlight
-          className="top-1/3 right-1/4 h-[50vh] w-[35vw]"
+          className="top-1/4 right-1/4 h-[50vh] w-[35vw]"
           fill="white"
         />
         <Spotlight
-          className="bottom-1/4 left-1/3 h-[45vh] w-[30vw]"
+          className="bottom-1/4 left-1/4 h-[45vh] w-[30vw]"
           fill="red"
         />
         <Spotlight
-          className="-bottom-10 right-10 h-[55vh] w-[38vw]"
+          className="-bottom-5 right-1/4 h-[55vh] w-[38vw]"
           fill="white"
         />
         <Spotlight
-          className="top-1/2 -left-32 h-[65vh] w-[42vw]"
+          className="top-1/2 -left-20 h-[65vh] w-[42vw]"
           fill="red"
         />
         <Spotlight
-          className="top-16 right-1/3 h-[48vh] w-[32vw]"
+          className="top-20 right-1/2 h-[48vh] w-[32vw]"
           fill="white"
         />
         <Spotlight
-          className="bottom-1/3 right-0 h-[52vh] w-[36vw]"
+          className="bottom-1/3 right-1/3 h-[52vh] w-[36vw]"
           fill="red"
         />
         <Spotlight
-          className="-top-32 left-1/2 h-[58vh] w-[40vw]"
+          className="-top-5 left-1/2 h-[58vh] w-[40vw]"
+          fill="white"
+        />
+        <Spotlight
+          className="top-1/3 left-1/4 h-[40vh] w-[25vw]"
+          fill="red"
+        />
+        <Spotlight
+          className="bottom-1/2 right-1/2 h-[35vh] w-[28vw]"
           fill="white"
         />
       </div>
 
-      <BackgroundBeams className="z-0" />
+      <Suspense fallback={<div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/5" />}>
+        <BackgroundBeams className="z-0" />
+      </Suspense>
 
       <div className="flex justify-center relative my-20 z-10">
         <div className="max-w-[89vw] md:max-w-2xl lg:max-w-[60vw] flex flex-col items-center justify-center">

@@ -49,3 +49,26 @@ body {
     }
   }
 }
+.animate-spotlight {
+  animation: spotlight 2s ease-out forwards;
+}
+
+@keyframes spotlight {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Optimize heavy animations */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}

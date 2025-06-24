@@ -6,6 +6,13 @@ import {
   useScroll,
   useMotionValueEvent,
 } from "framer-motion";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -98,6 +105,27 @@ export const FloatingNav = ({
               <span className="text-xs sm:text-sm !cursor-pointer whitespace-nowrap">{navItem.name}</span>
             </Link>
           ))}
+        </div>
+        <div className="h-6 w-px bg-white/20 hidden sm:block"></div>
+        
+        <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
+          <SignedOut>
+            {/* These buttons will open the Clerk sign-in modal */}
+            <SignInButton mode="modal">
+              <button className="relative dark:text-neutral-50 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500 transition-colors duration-200 text-xs sm:text-sm">
+                Sign In
+              </button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+               <button className="relative dark:text-neutral-50 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500 transition-colors duration-200 text-xs sm:text-sm">
+                Sign Up
+              </button>
+            </SignUpButton>
+          </SignedOut>
+
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
         </div>
       </motion.div>
     </AnimatePresence>
