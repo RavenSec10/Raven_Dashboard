@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/input';
-import { useRouter } from 'next/navigation';
+import {useSearchParams,useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { CustomFormField } from '@/components/ui/form';
 
@@ -23,6 +23,8 @@ const formSchema = z.object({
 
 export default function SignInPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl') || '/';
   const {
     register,
     handleSubmit,
@@ -40,18 +42,19 @@ export default function SignInPage() {
       redirect: false,
       email: values.email,
       password: values.password,
+      callbackUrl,
     });
 
     if (result?.error) {
       toast.error(result.error);
     } else {
       toast.success('Signed in successfully!');
-      router.push('/profile');
+      router.push(result?.url ?? callbackUrl);
     }
   };
 
   const handleOAuthSignIn = (provider: 'google' | 'github') => {
-    signIn(provider, { callbackUrl: '/profile' });
+    signIn(provider, { callbackUrl });
   };
 
   return (

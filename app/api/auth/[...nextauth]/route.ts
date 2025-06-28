@@ -1,4 +1,4 @@
-import NextAuth, { NextAuthOptions } from 'next-auth';
+import NextAuth, { NextAuthOptions, DefaultSession } from 'next-auth';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
@@ -6,7 +6,29 @@ import GitHubProvider from 'next-auth/providers/github';
 import prisma from '@/lib/prismadb';
 import bcrypt from 'bcryptjs';
 import { sign, verify } from 'jsonwebtoken';
-import { JWT } from 'next-auth/jwt';
+
+declare module 'next-auth' {
+  interface Session {
+    accessToken?: string;
+    refreshTokenId?: string;
+    user: {
+      id: string;
+    } & DefaultSession['user'];
+  }
+
+  interface User {
+    id: string;
+  }
+}
+
+declare module 'next-auth/jwt' {
+  interface JWT {
+    accessToken?: string;
+    refreshTokenId?: string;  
+    userId?: string;
+    accessTokenExp?: number;
+  }
+}
 
 const createTokens = async (user: { id: string }) => {
   const accessToken = sign(
@@ -74,26 +96,6 @@ export const authOptions: NextAuthOptions = {
   },
   jwt: {
     secret: process.env.NEXTAUTH_SECRET,
-    async encode({ token, secret }) {
-      if (!token) {
-        throw new Error('No token to encode');
-      }
-      return sign(
-        token, 
-        Buffer.from(process.env.JWT_PRIVATE_KEY!, 'base64').toString('ascii'), 
-        { algorithm: 'RS256' }
-      );
-    },
-    async decode({ token, secret }) {
-      if (!token) {
-        throw new Error('No token to decode');
-      }
-      return verify(
-        token,
-        Buffer.from(process.env.JWT_PUBLIC_KEY!, 'base64').toString('ascii'),
-        { algorithms: ['RS256'] }
-      ) as JWT;
-    },
   },
   callbacks: {
     async jwt({ token, user, account }) {
@@ -105,76 +107,59 @@ export const authOptions: NextAuthOptions = {
           accessToken,
           refreshTokenId,
           userId: user.id,
+          accessTokenExp: Math.floor(Date.now() / 1000) + (15 * 60),
         };
       }
-      
-      try {
-        verify(
-          token.accessToken as string,
-          Buffer.from(process.env.JWT_PUBLIC_KEY!, 'base64').toString('ascii')
-        );
+
+      if (!token.accessToken) {
         return token;
-      } catch (error) {
-        if ((error as any).name !== 'TokenExpiredError') {
-            console.error('JWT validation error:', error);
-            return { ...token, error: "JsonWebTokenError" };
+      }
+
+      const currentTime = Math.floor(Date.now() / 1000);
+      const tokenExp = token.accessTokenExp as number;
+
+      if (currentTime < tokenExp) {
+        return token;
+      }
+
+      try {
+        const storedRefreshToken = await prisma.refreshToken.findUnique({
+          where: { id: token.refreshTokenId as string, revoked: false },
+        });
+
+        if (!storedRefreshToken || storedRefreshToken.expiresAt < new Date()) {
+          return token;
         }
         
-        console.log("Access Token has expired, attempting to refresh...");
+        await prisma.refreshToken.update({
+          where: { id: storedRefreshToken.id },
+          data: { revoked: true },
+        });
 
-        try {
-          const storedRefreshToken = await prisma.refreshToken.findUnique({
-            where: { id: token.refreshTokenId as string, revoked: false },
-          });
+        const { accessToken, refreshTokenId } = await createTokens({ id: token.userId as string });
+        
+        return {
+          ...token,
+          accessToken,
+          refreshTokenId,
+          accessTokenExp: Math.floor(Date.now() / 1000) + (15 * 60),
+        };
 
-          if (!storedRefreshToken) {
-             console.log("Refresh token not found or revoked.");
-             return { ...token, error: "RefreshAccessTokenError" };
-          }
-          
-          // Check if refresh token has expired
-          if (storedRefreshToken.expiresAt < new Date()) {
-            console.log("Refresh token has expired.");
-            return { ...token, error: "RefreshAccessTokenError" };
-          }
-          
-          // Invalidate the old refresh token (ROTATION)
-          await prisma.refreshToken.update({
-            where: { id: storedRefreshToken.id },
-            data: { revoked: true },
-          });
-
-          const { accessToken, refreshTokenId } = await createTokens({ id: token.userId as string });
-          
-          console.log("Successfully refreshed token.");
-          
-          return {
-            ...token,
-            accessToken,
-            refreshTokenId,
-            error: null,
-          };
-
-        } catch (refreshError) {
-          console.error("Error refreshing token: ", refreshError);
-          return { ...token, error: "RefreshAccessTokenError" };
-        }
+      } catch (refreshError) {
+        return token;
       }
     },
     async session({ session, token }) {
-      // Check if session.user exists before accessing it
       if (token && session.user) {
         session.user.id = token.userId as string;
-        if (token.error) {
-            session.error = token.error as string;
-        }
+        session.accessToken = token.accessToken as string;
+        session.refreshTokenId = token.refreshTokenId as string;
       }
       return session;
     },
   },
   events: {
     async signOut({ session, token }) {
-      // On sign-out, revoke all refresh tokens for the user
       if (token?.userId) {
         await prisma.refreshToken.updateMany({
           where: { userId: token.userId as string },

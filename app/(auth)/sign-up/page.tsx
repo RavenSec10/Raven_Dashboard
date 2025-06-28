@@ -11,9 +11,10 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/input';
-import { useRouter } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { CustomFormField } from '@/components/ui/form';
+import { signIn } from 'next-auth/react';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -23,6 +24,8 @@ const formSchema = z.object({
 
 export default function SignUpPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl') || '/';
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: { name: '', email: '', password: '' },
@@ -41,8 +44,19 @@ export default function SignUpPage() {
         throw new Error(errorData.error || 'Failed to register');
       }
       
-      toast.success('Registration successful! Please sign in.');
-      router.push('/sign-in');
+      toast.success('Registration successful! Logging you in...');
+      const result = await signIn('credentials', {
+        redirect: false,
+        email: values.email,
+        password: values.password,
+        callbackUrl,
+      });
+
+      if (result?.error) {
+        throw new Error(result.error);
+      }
+
+      router.push(result?.url ?? callbackUrl);
     } catch (error: any) {
       toast.error(error.message);
     }
