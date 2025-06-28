@@ -17,10 +17,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { Skeleton } from "./skeleton";
+import { User, Settings, LogOut, ChevronDown } from "lucide-react";
 
 export const FloatingNav = ({
   navItems,
@@ -124,24 +126,86 @@ export const FloatingNav = ({
           {status === "authenticated" && session.user && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                  <Avatar className="h-9 w-9">
-                    <AvatarImage src={session.user.image ?? ""} alt={session.user.name ?? ""} />
-                    <AvatarFallback className="bg-white/20">
-                      {session.user.name?.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
+                <Button variant="ghost" className="relative h-10 w-auto rounded-full px-3 hover:bg-white/10 focus:ring-2 focus:ring-white/20 focus:ring-offset-0">
+                  <div className="flex items-center space-x-2">
+                    <Avatar className="h-8 w-8">
+                      {session.user.image ? (
+                        <AvatarImage 
+                          src={session.user.image} 
+                          alt={session.user.name || "User Avatar"} 
+                        />
+                      ) : (
+                        <AvatarFallback className="bg-white/20 text-white text-sm font-semibold">
+                          {session.user.name?.charAt(0).toUpperCase() || 'U'}
+                        </AvatarFallback>
+                      )}
+                    </Avatar>
+                    <div className="hidden sm:flex flex-col items-start">
+                      <span className="text-white text-sm font-medium truncate max-w-[120px]">
+                        {session.user.name || 'User'}
+                      </span>
+                      <span className="text-white/70 text-xs truncate max-w-[120px]">
+                        {session.user.email}
+                      </span>
+                    </div>
+                    <ChevronDown className="h-4 w-4 text-white/70 hidden sm:block transition-transform duration-200" />
+                  </div>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-[rgba(17,25,40,0.9)] border-white/20 text-white">
-                <DropdownMenuItem className="cursor-pointer">
-                  <Link href="/profile" className="w-full block">
-                    Profile
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/" })} className="cursor-pointer">
-                  Logout
-                </DropdownMenuItem>
+              <DropdownMenuContent 
+                align="end" 
+                alignOffset={30}
+                className="w-56 sm:w-64 bg-[rgba(17,25,40,0.95)] border border-white/20 text-white shadow-xl backdrop-blur-md rounded-lg overflow-hidden"
+                sideOffset={12}
+                side="bottom"
+              >
+                {/* User Info Header */}
+                <div className="px-3 py-3 border-b border-white/10">
+                  <div className="flex items-center space-x-3">
+                    <Avatar className="h-10 w-10">
+                      {session.user.image ? (
+                        <AvatarImage 
+                          src={session.user.image} 
+                          alt={session.user.name || "User Avatar"} 
+                        />
+                      ) : (
+                        <AvatarFallback className="bg-white/20 text-white font-semibold">
+                          {session.user.name?.charAt(0).toUpperCase() || 'U'}
+                        </AvatarFallback>
+                      )}
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-white truncate">
+                        {session.user.name || 'User'}
+                      </p>
+                      <p className="text-xs text-white/70 truncate">
+                        {session.user.email}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Menu Items */}
+                <div className="py-1">
+                  <DropdownMenuItem className="cursor-pointer hover:bg-white/10 focus:bg-white/10 transition-colors px-3 py-2">
+                    <Link href="/profile" className="w-full flex items-center space-x-2">
+                      <User className="h-4 w-4" />
+                      <span>Manage account</span>
+                    </Link>
+                  </DropdownMenuItem>
+                </div>
+
+                <DropdownMenuSeparator className="bg-white/10" />
+
+                <div className="py-1">
+                  <DropdownMenuItem 
+                    onClick={() => signOut({ callbackUrl: "/" })} 
+                    className="cursor-pointer hover:bg-red-500/20 focus:bg-red-500/20 text-red-400 hover:text-red-300 transition-colors px-3 py-2"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Sign out</span>
+                  </DropdownMenuItem>
+                </div>
               </DropdownMenuContent>
             </DropdownMenu>
           )}

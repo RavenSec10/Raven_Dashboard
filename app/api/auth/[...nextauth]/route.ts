@@ -6,6 +6,7 @@ import GitHubProvider from 'next-auth/providers/github';
 import prisma from '@/lib/prismadb';
 import bcrypt from 'bcryptjs';
 import { sign, verify } from 'jsonwebtoken';
+import { randomBytes } from 'crypto';
 
 declare module 'next-auth' {
   interface Session {
@@ -30,25 +31,49 @@ declare module 'next-auth/jwt' {
   }
 }
 
+const cleanupExpiredTokens = async () => {
+  try {
+    const result = await prisma.refreshToken.deleteMany({
+      where: {
+        OR: [
+          { expiresAt: { lt: new Date() } },
+          { revoked: true, updatedAt: { lt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } }
+        ]
+      }
+    });
+    console.log(`Cleaned up ${result.count} expired/revoked refresh tokens`);
+  } catch (error) {
+    console.error('Token cleanup error:', error);
+  }
+};
+
 const createTokens = async (user: { id: string }) => {
+  await cleanupExpiredTokens();
+
   const accessToken = sign(
     { userId: user.id },
     Buffer.from(process.env.JWT_PRIVATE_KEY!, 'base64').toString('ascii'),
     { algorithm: 'RS256', expiresIn: '15m' }
   );
 
+  const refreshTokenValue = randomBytes(32).toString('hex');
+
   const expiresAt = new Date();
-  expiresAt.setDate(expiresAt.getDate() + 30);
+  expiresAt.setDate(expiresAt.getDate() + 7);
 
   const refreshToken = await prisma.refreshToken.create({
     data: {
       userId: user.id,
-      hashedToken: bcrypt.hashSync(accessToken, 10),
+      hashedToken: bcrypt.hashSync(refreshTokenValue, 10),
       expiresAt: expiresAt,
     },
   });
 
-  return { accessToken, refreshTokenId: refreshToken.id };
+  return { 
+    accessToken, 
+    refreshTokenId: refreshToken.id,
+    refreshTokenValue
+  };
 };
 
 export const authOptions: NextAuthOptions = {
@@ -100,12 +125,13 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user, account }) {
       if (account && user) {
-        const { accessToken, refreshTokenId } = await createTokens(user);
+        const { accessToken, refreshTokenId, refreshTokenValue } = await createTokens(user);
         
         return {
           ...token,
           accessToken,
           refreshTokenId,
+          refreshTokenValue,
           userId: user.id,
           accessTokenExp: Math.floor(Date.now() / 1000) + (15 * 60),
         };
@@ -124,11 +150,38 @@ export const authOptions: NextAuthOptions = {
 
       try {
         const storedRefreshToken = await prisma.refreshToken.findUnique({
-          where: { id: token.refreshTokenId as string, revoked: false },
+          where: { 
+            id: token.refreshTokenId as string,
+            revoked: false 
+          },
         });
 
         if (!storedRefreshToken || storedRefreshToken.expiresAt < new Date()) {
-          return token;
+          console.log('Refresh token not found or expired');
+          return {
+            ...token,
+            accessToken: undefined,
+            refreshTokenId: undefined,
+            refreshTokenValue: undefined,
+            accessTokenExp: undefined,
+          };
+        }
+
+        // Validate the refresh token value
+        const isValidRefreshToken = await bcrypt.compare(
+          token.refreshTokenValue as string, 
+          storedRefreshToken.hashedToken
+        );
+
+        if (!isValidRefreshToken) {
+          console.log('Invalid refresh token');
+          return {
+            ...token,
+            accessToken: undefined,
+            refreshTokenId: undefined,
+            refreshTokenValue: undefined,
+            accessTokenExp: undefined,
+          };
         }
         
         await prisma.refreshToken.update({
@@ -136,24 +189,34 @@ export const authOptions: NextAuthOptions = {
           data: { revoked: true },
         });
 
-        const { accessToken, refreshTokenId } = await createTokens({ id: token.userId as string });
+        const { accessToken, refreshTokenId, refreshTokenValue } = await createTokens({ 
+          id: token.userId as string 
+        });
         
         return {
           ...token,
           accessToken,
           refreshTokenId,
+          refreshTokenValue,
           accessTokenExp: Math.floor(Date.now() / 1000) + (15 * 60),
         };
 
       } catch (refreshError) {
-        return token;
+        console.error('Token refresh error:', refreshError);
+        return {
+          ...token,
+          accessToken: undefined,
+          refreshTokenId: undefined,
+          refreshTokenValue: undefined,
+          accessTokenExp: undefined,
+        };
       }
     },
     async session({ session, token }) {
       if (token && session.user) {
         session.user.id = token.userId as string;
-        session.accessToken = token.accessToken as string;
-        session.refreshTokenId = token.refreshTokenId as string;
+        //session.accessToken = token.accessToken as string;
+        //session.refreshTokenId = token.refreshTokenId as string;
       }
       return session;
     },
@@ -162,7 +225,10 @@ export const authOptions: NextAuthOptions = {
     async signOut({ session, token }) {
       if (token?.userId) {
         await prisma.refreshToken.updateMany({
-          where: { userId: token.userId as string },
+          where: { 
+            userId: token.userId as string,
+            revoked: false 
+          },
           data: { revoked: true },
         });
       }
