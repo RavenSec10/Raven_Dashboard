@@ -62,7 +62,6 @@ export default function SignInPage() {
 
   return (
     <div className="min-h-screen bg-slate-900 relative overflow-hidden">
-      {/* Animated background gradients */}
       <div className="absolute inset-0">
         <div className="absolute top-0 -left-4 w-96 h-96 bg-red-500/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
         <div className="absolute top-0 -right-4 w-96 h-96 bg-red-600/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
@@ -85,7 +84,7 @@ export default function SignInPage() {
                   />
                 </div>
                 <div className="ml-4">
-                  <h1 className="text-2xl font-bold text-white">RavenSec</h1>
+                  <h1 className="text-2xl font-bold text-white"><span className='text-red-500'>Raven</span>Sec</h1>
                   <p className="text-sm text-slate-400">API Security Intelligence</p>
                 </div>
              </div>
