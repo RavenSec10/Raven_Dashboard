@@ -38,6 +38,8 @@ export const FloatingNav = ({
   const [visible, setVisible] = useState(true);
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [isNavigatingToProfile, setIsNavigatingToProfile] = useState(false);
+  const [isNavigatingToSignIn, setIsNavigatingToSignIn] = useState(false);
+  const [isNavigatingToSignUp, setIsNavigatingToSignUp] = useState(false);
   const { data: session, status } = useSession();
 
   useMotionValueEvent(scrollYProgress, "change", (current) => {
@@ -72,6 +74,20 @@ export const FloatingNav = ({
     }, 3000);
   };
 
+  const handleSignInNavigation = () => {
+    setIsNavigatingToSignIn(true);
+    setTimeout(() => {
+      setIsNavigatingToSignIn(false);
+    }, 3000);
+  };
+
+  const handleSignUpNavigation = () => {
+    setIsNavigatingToSignUp(true);
+    setTimeout(() => {
+      setIsNavigatingToSignUp(false);
+    }, 3000);
+  };
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -89,7 +105,7 @@ export const FloatingNav = ({
           border: "1px solid rgba(255, 255, 255, 0.125)",
         }}
       >
-        {/* === Left and Center Section: Logo and Nav Items === */}
+        {/* Left and Center Section: Logo and Nav Items */}
         <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
           <Link href="/" className="flex items-center space-x-2">
             <Image
@@ -124,7 +140,7 @@ export const FloatingNav = ({
           </div>
         </div>
 
-        {/* Right Section: Dynamic Auth UI */}
+        {/* Right Section*/}
         <div className="h-6 w-px bg-white/20 hidden sm:block"></div>
         <div className="flex items-center space-x-2 sm:space-x-3">
           {status === "loading" && (
@@ -133,11 +149,45 @@ export const FloatingNav = ({
 
           {status === "unauthenticated" && (
             <>
-              <Button asChild variant="ghost" className="text-white hover:bg-white/10 hover:text-white text-xs sm:text-sm h-9 px-3">
-                <Link href="/sign-in">Sign In</Link>
+              <Button 
+                asChild 
+                variant="ghost" 
+                className={cn(
+                  "text-white hover:bg-white/10 hover:text-white text-xs sm:text-sm h-9 px-3 transition-all duration-200",
+                  isNavigatingToSignIn && "opacity-70 cursor-not-allowed"
+                )}
+                disabled={isNavigatingToSignIn || isNavigatingToSignUp}
+              >
+                <Link 
+                  href="/sign-in"
+                  onClick={handleSignInNavigation}
+                  className="flex items-center space-x-2"
+                >
+                  {isNavigatingToSignIn && (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  )}
+                  <span>{isNavigatingToSignIn ? "Loading..." : "Sign In"}</span>
+                </Link>
               </Button>
-              <Button asChild className="bg-red-500 hover:bg-red-600 text-white text-xs sm:text-sm h-9 px-3">
-                <Link href="/sign-up">Sign Up</Link>
+              
+              <Button 
+                asChild 
+                className={cn(
+                  "bg-red-500 hover:bg-red-600 text-white text-xs sm:text-sm h-9 px-3 transition-all duration-200",
+                  isNavigatingToSignUp && "opacity-70 cursor-not-allowed bg-red-600"
+                )}
+                disabled={isNavigatingToSignIn || isNavigatingToSignUp}
+              >
+                <Link 
+                  href="/sign-up"
+                  onClick={handleSignUpNavigation}
+                  className="flex items-center space-x-2"
+                >
+                  {isNavigatingToSignUp && (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  )}
+                  <span>{isNavigatingToSignUp ? "Loading..." : "Sign Up"}</span>
+                </Link>
               </Button>
             </>
           )}
