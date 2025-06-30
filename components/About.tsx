@@ -48,7 +48,7 @@ const About = () => {
               ) : (
                 <iframe
                   className="w-full h-full"
-                  src="https://www.youtube.com/embed/FTH6Dn3AyIQ?si=Z4r2Cp1yD_b3R_s7&autoplay=1"
+                  src="https://www.youtube.com/embed/p7HJm__Kv64?autoplay=1"
                   title="YouTube video player"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
