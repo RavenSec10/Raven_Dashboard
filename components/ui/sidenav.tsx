@@ -47,6 +47,7 @@ const getAvatarColor = (initials: string): string => {
 export default function SideNav() {
   const { data: session, status } = useSession();
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const [isLogoLoading, setIsLogoLoading] = useState(false);
 
   const handleSignOut = async () => {
     setIsSigningOut(true);
@@ -58,21 +59,33 @@ export default function SideNav() {
     }
   };
 
+  const handleLogoClick = () => {
+    setIsLogoLoading(true);
+    setTimeout(() => setIsLogoLoading(false), 2000);
+  };
+
   return (
     <div className="flex h-full flex-col bg-gray-900/95 backdrop-blur-sm border-r border-gray-800 shadow-2xl">
       <Link
         className="group mb-6 flex h-20 items-center justify-start px-6 py-4 transition-all duration-300 hover:bg-red-950/30"
         href="/"
+        onClick={handleLogoClick}
       >
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 group-hover:scale-105 transition-transform duration-300">
-            <Image
-              src="/ravensec-logo.png"
-              alt="RavenSec Logo"
-              width={40}
-              height={40}
-              className="w-full h-full object-contain"
-            />
+          <div className="w-10 h-10 group-hover:scale-105 transition-transform duration-300 relative">
+            {isLogoLoading ? (
+              <div className="w-full h-full flex items-center justify-center">
+                <Loader2 className="h-6 w-6 animate-spin text-cyan-400" />
+              </div>
+            ) : (
+              <Image
+                src="/ravensec-logo.png"
+                alt="RavenSec Logo"
+                width={40}
+                height={40}
+                className="w-full h-full object-contain"
+              />
+            )}
           </div>
           <div className="hidden md:block">
             <h1 className="text-xl font-bold text-white group-hover:text-red-100 transition-colors duration-300">
@@ -91,7 +104,6 @@ export default function SideNav() {
         </nav>
       </div>
 
-      {/* User Profile Section */}
       <div className="px-3 pb-4">
         {status === "loading" && (
           <div className="mb-4 rounded-lg bg-gray-800/50 p-4 border border-gray-700/50">
@@ -107,7 +119,6 @@ export default function SideNav() {
 
         {status === "authenticated" && session?.user && (
           <>
-            {/* User Info */}
             <div className="mb-4 rounded-lg bg-gray-800/50 p-4 border border-gray-700/50">
               <div className="flex items-center space-x-3">
                 <div className="relative">
@@ -129,28 +140,23 @@ export default function SideNav() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Link 
-                href="/"
-                className="group flex h-11 w-full items-center justify-center gap-3 rounded-lg bg-gray-800/50 p-3 text-sm font-medium text-gray-300 transition-all duration-200 hover:bg-gray-700/50 hover:text-white border border-gray-700/50 hover:border-gray-600 md:justify-start"
-              >
-                <HomeIcon className="h-5 w-5 text-gray-400 group-hover:text-gray-300 transition-colors duration-200" />
-                <span className="hidden md:block">Home</span>
-              </Link>
-              
+            <div className="space-y-2">    
               <button 
                 onClick={handleSignOut}
                 disabled={isSigningOut}
-                className="group flex h-11 w-full items-center justify-center gap-3 rounded-lg bg-red-600/10 p-3 text-sm font-medium text-red-400 transition-all duration-200 hover:bg-red-600/20 hover:text-red-300 border border-red-600/20 hover:border-red-600/40 md:justify-start disabled:opacity-50 disabled:cursor-not-allowed"
+                className="group flex h-11 w-full items-center justify-center gap-3 rounded-lg bg-red-600/10 p-3 text-sm font-medium text-red-400 transition-all duration-200 hover:bg-red-600/20 hover:text-red-300 border border-red-600/20 hover:border-red-600/40 md:justify-start disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 {isSigningOut ? (
-                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <>
+                    <span className="hidden md:block">Signing out</span>
+                    <Loader2 className="h-5 w-5 animate-spin text-red-400 group-hover:text-red-300" />
+                  </>
                 ) : (
-                  <ArrowRightOnRectangleIcon className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                  <>
+                    <ArrowRightOnRectangleIcon className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                    <span className="hidden md:block">Sign Out</span>
+                  </>
                 )}
-                <span className="hidden md:block">
-                  {isSigningOut ? 'Signing out...' : 'Sign Out'}
-                </span>
               </button>
             </div>
           </>

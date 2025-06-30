@@ -41,7 +41,7 @@ export default async function ProfilePage() {
         </div>
 
         {/* Main Content */}
-        <Card className="border border-slate-700/50 bg-gradient-to-br from-slate-800 to-slate-900 backdrop-blur-sm shadow-2xl shadow-black/50 hover:shadow-red-500/20 transition-all duration-500">
+        <Card className="border border-slate-700/50 bg-gradient-to-br from-slate-800 to-slate-900 backdrop-blur-sm shadow-2xl shadow-black/50">
           <CardContent className="space-y-8 p-8">
             
             {/* Profile Section */}
@@ -247,23 +247,6 @@ export default async function ProfilePage() {
                 </div>
               </div>
             </div>
-
-            {/* Debug Section (Development Only) with Dark Theme */}
-            {process.env.NODE_ENV === 'development' && (
-              <div className="mt-8 p-6 bg-gradient-to-br from-slate-800 to-slate-900 rounded-lg shadow-inner border border-slate-700">
-                <details className="cursor-pointer group">
-                  <summary className="font-semibold text-gray-300 mb-4 hover:text-white transition-colors duration-200 flex items-center gap-2">
-                    <span className="text-lg">Debug Information</span>
-                    <Badge variant="outline" className="text-xs border-slate-600 text-gray-400">Development Only</Badge>
-                  </summary>
-                  <div className="mt-4 p-4 bg-slate-900 rounded-lg border border-slate-700">
-                    <pre className="text-sm text-green-400 overflow-x-auto whitespace-pre-wrap font-mono">
-                      {JSON.stringify(session, null, 2)}
-                    </pre>
-                  </div>
-                </details>
-              </div>
-            )}
           </CardContent>
         </Card>
       </div>

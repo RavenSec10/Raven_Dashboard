@@ -1,5 +1,6 @@
 import { lusitana } from '@/components/ui/fonts';
 import Image from 'next/image';
+import Link from 'next/link';
 import { 
   ShieldCheckIcon, 
   EyeIcon, 
@@ -93,12 +94,12 @@ export default function Page() {
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <button className="group relative inline-flex items-center justify-center px-8 py-3 text-lg font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-red-500/25">
-                    <EyeIcon className="mr-2 h-5 w-5" />
-                    View Endpoints
+                  <Link href="/dashboard/endpoints" className="group relative inline-flex items-center justify-center px-8 py-3 text-lg font-medium text-white bg-red-500 hover:bg-red-500 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-red-500/25">
+                    <EyeIcon className="mr-2 h-5 w-5 relative z-10" />
+                    <span className="relative z-10">View Endpoints</span>
                     <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-red-600 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
-                  </button>
-                  <button className="inline-flex items-center justify-center px-8 py-3 text-lg font-medium text-gray-300 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg transition-all duration-200 border border-gray-700 hover:border-gray-600">
+                   </Link>
+                  <button className="inline-flex items-center justify-center px-8 py-3 text-lg font-medium text-gray-300 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg transition-all duration-200 border border-gray-700 hover:border-gray-600 cursor-pointer">
                     <ChartBarIcon className="mr-2 h-5 w-5" />
                     View Analytics
                   </button>
@@ -191,9 +192,9 @@ export default function Page() {
               ))}
             </div>
             <div className="px-6 py-4 border-t border-gray-700">
-              <button className="w-full text-center text-sm font-medium text-red-400 hover:text-red-300 transition-colors duration-200">
+              <Link href="/dashboard/endpoints" className="w-full text-center text-sm font-medium text-red-400 hover:text-red-300 transition-colors duration-200 cursor-pointer">
                 View all detections →
-              </button>
+              </Link>
             </div>
           </div>
         </div>
