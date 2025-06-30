@@ -1,11 +1,27 @@
-import React, { Suspense, lazy } from 'react'
+"use client";
+import React, { Suspense, lazy, useState } from 'react'
 import { Spotlight } from './ui/Spotlight';
 import MagicButton from "./MagicButton";
 import { TextGenerateEffect } from "./ui/TextGenerateEffect";
 import { FaLocationArrow } from "react-icons/fa6";
 import { cn } from "@/lib/utils";
+import { useRouter } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
+
 const BackgroundBeams = lazy(() => import('./ui/BackgroundBeams').then(module => ({ default: module.BackgroundBeams })));
+
 const Hero = () => {
+  const [isNavigatingToDashboard, setIsNavigatingToDashboard] = useState(false);
+  const router = useRouter();
+
+  const handleGetStartedClick = () => {
+    setIsNavigatingToDashboard(true);
+    router.push('/dashboard');
+    setTimeout(() => {
+      setIsNavigatingToDashboard(false);
+    }, 3000);
+  };
+
   return (
     <div className='pb-20 pt-36 relative'>
         <div>
@@ -82,13 +98,27 @@ const Hero = () => {
             Inspect API traffic to comprehensively map all endpoints and routes, classify data types and payload structures, verify authentication mechanisms and authorization controls, detect sensitive information exposure, and identify potential security vulnerabilities across your API infrastructure.
           </p>
 
-          <a href="#about">
+          <div 
+            onClick={isNavigatingToDashboard ? undefined : handleGetStartedClick}
+            className={cn(
+              "transition-all duration-200",
+              isNavigatingToDashboard 
+                ? "opacity-70 cursor-not-allowed" 
+                : "cursor-pointer hover:scale-105"
+            )}
+          >
             <MagicButton
-              title="Get Started"
-              icon={<FaLocationArrow />}
+              title={isNavigatingToDashboard ? "Loading..." : "Get Started"}
+              icon={
+                isNavigatingToDashboard ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <FaLocationArrow />
+                )
+              }
               position="right"
             />
-          </a>
+          </div>
         </div>
       </div>
     </div>

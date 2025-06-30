@@ -19,7 +19,7 @@ export const gridItems = [
   },
   {
     id: 2,
-    title: "Your <span class='text-red-500'>APIs</span> are leaking more than you think",
+    title: "Your <span class='text-rose-400'>APIs</span> are leaking more than you think",
     description: "Sensitive data, tokens, and credentials hiding in plain sight.",
     className: "lg:col-span-2 md:col-span-3 md:row-span-2",
     imgClassName: "",
@@ -29,7 +29,7 @@ export const gridItems = [
   },
   {
     id: 3,
-    title: "<span class='text-red-500'>Tech</span> Stack",
+    title: "<span class='text-rose-400'>Tech</span> Stack",
     description: "Built for speed, scale, and real-time processing. Every component optimized for maximum performance.",
     className: "lg:col-span-2 md:col-span-3 md:row-span-2",
     imgClassName: "",
@@ -50,7 +50,7 @@ export const gridItems = [
 
   {
     id: 5,
-    title: "Advanced <span class='text-red-500'>encryption that</span> keeps your data fortress secure",
+    title: "Advanced <span class='text-rose-400'>encryption that</span> keeps your data fortress secure",
     description: "The Inside Scoop",
     className: "md:col-span-3 md:row-span-2",
     imgClassName: "w-full h-full object-cover",
@@ -60,7 +60,7 @@ export const gridItems = [
   },
   {
     id: 6,
-    title: "Global threat intelligence that predicts attacks <span class='text-red-500'>before they happen</span>.",
+    title: "Global threat intelligence that predicts attacks <span class='text-rose-400'>before they happen</span>.",
     description: "",
     className: "lg:col-span-2 md:col-span-3 md:row-span-1",
     imgClassName: "",

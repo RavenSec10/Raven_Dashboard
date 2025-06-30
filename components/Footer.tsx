@@ -1,9 +1,25 @@
+"use client";
 import { FaLocationArrow } from "react-icons/fa6";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 import { socialMedia } from "@/data";
 import MagicButton from "./MagicButton";
 
 const Footer = () => {
+  const [isNavigatingToDashboard, setIsNavigatingToDashboard] = useState(false);
+  const router = useRouter();
+
+  const handleStartAssessmentClick = () => {
+    setIsNavigatingToDashboard(true);
+    router.push('/dashboard');
+    setTimeout(() => {
+      setIsNavigatingToDashboard(false);
+    }, 3000);
+  };
+
   return (
     <footer className="w-full pt-1 pb-10 relative" id="contact">
       {/* background grid */}
@@ -25,13 +41,27 @@ const Footer = () => {
           Discover vulnerabilities, prevent attacks, and ensure your API infrastructure 
           is bulletproof. Let&apos;s build a comprehensive security strategy together.
         </p>
-        <a href="mailto:contact@ravensec.pro">
+        <div 
+          onClick={isNavigatingToDashboard ? undefined : handleStartAssessmentClick}
+          className={cn(
+            "transition-all duration-200",
+            isNavigatingToDashboard 
+              ? "opacity-70 cursor-not-allowed" 
+              : "cursor-pointer hover:scale-105"
+          )}
+        >
           <MagicButton
-            title="Start Security Assessment"
-            icon={<FaLocationArrow />}
+            title={isNavigatingToDashboard ? "Loading..." : "Start Security Assessment"}
+            icon={
+              isNavigatingToDashboard ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <FaLocationArrow />
+              )
+            }
             position="right"
           />
-        </a>
+        </div>
       </div>
 
       <div className="flex flex-col items-center justify-start py-16">
@@ -47,7 +77,6 @@ const Footer = () => {
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">Self-hosted</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">Cloud</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">Traffic Connectors</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">AktoGPT</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">Pricing</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">Changelog</a></li>
               </ul>
@@ -135,7 +164,7 @@ const Footer = () => {
           </div>
           
           <p className="md:text-base text-sm md:font-normal font-light text-center">
-            Copyright © 2024 Team RavenSec
+            Copyright © 2025 Team RavenSec
           </p>
         </div>
       </div>
