@@ -76,16 +76,16 @@ export default function SignInPage() {
         <div className="hidden lg:flex lg:flex-1 lg:flex-col lg:justify-center lg:px-8 xl:px-16">
           <div className="mx-auto max-w-sm xl:max-w-md">
             <div className="flex items-center mb-8">
-                <div className="flex h-12 w-12 items-center justify-center">
+                <div className="flex h-16 w-16 items-center justify-center">
                   <img 
                     src="/ravensec-logo.png" 
                     alt="RavenSec Logo" 
-                    className="h-16 w-16 object-contain"
+                    className="h-24 w-24 object-contain"
                   />
                 </div>
                 <div className="ml-4">
-                  <h1 className="text-2xl font-bold text-white"><span className='text-red-500'>Raven</span>Sec</h1>
-                  <p className="text-sm text-slate-400">API Security Intelligence</p>
+                  <h1 className="text-4xl font-bold text-white"><span className='text-red-500'>Raven</span>Sec</h1>
+                  <p className="text-lg text-slate-400">API Security Intelligence</p>
                 </div>
              </div>
             
@@ -260,7 +260,7 @@ export default function SignInPage() {
                   Don't have an account?{' '}
                   <button
                   onClick={() => router.push('/sign-up')}
-                  className="text-red-400 hover:text-red-300 font-medium transition-colors">
+                  className="text-red-400 hover:text-red-300 font-medium transition-colors cursor-pointer">
                     Sign up
                   </button>
                 </p>
